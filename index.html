@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vote Interactive Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      transition: background-color 0.5s ease;
+      color: white;
+      overflow: hidden;
+    }
+    .container {
+      text-align: center;
+    }
+    .question {
+      font-size: 4em;
+      margin-bottom: 1em;
+	  color: black;
+	  font-weight: bold;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+      margin-top: 1em;
+    }
+    .btn {
+      padding: 1em 2em;
+      font-size: 1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      transition: transform 0.3s;
+    }
+    .btn:hover {
+      transform: scale(1.1);
+    }
+    /* Falling animation */
+    @keyframes fall {
+      0% { transform: translateY(-100vh) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+    .confetti, .frown {
+      position: fixed;
+      top: 0;
+      font-size: 2em;
+      animation: fall linear infinite;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="question" id="question-text">Are you easily offended?</div>
+    <div class="buttons" id="buttons-container">
+      <button class="btn" style="background-color: green;" onclick="vote('kamala')">Yes</button>
+      <button class="btn" style="background-color: gray;" onclick="vote('trump')">No</button>
+    </div>
+  </div>
+  
+  <script>
+    let confettiInterval, frownInterval;
+
+    function createConfetti() {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+      confetti.innerText = ["🎉", "🎊", "🥳"][Math.floor(Math.random() * 3)];
+      confetti.style.left = Math.random() * 100 + "vw";
+      confetti.style.animationDuration = Math.random() * 2 + 3 + "s";
+      document.body.appendChild(confetti);
+
+      setTimeout(() => confetti.remove(), 5000);
+    }
+
+    function createFrown() {
+      const frown = document.createElement("div");
+      frown.classList.add("frown");
+      frown.innerText = "😢";
+      frown.style.left = Math.random() * 100 + "vw";
+      frown.style.animationDuration = Math.random() * 2 + 3 + "s";
+      document.body.appendChild(frown);
+
+      setTimeout(() => frown.remove(), 5000);
+    }
+
+    function startRainingConfetti() {
+      clearInterval(confettiInterval);
+      confettiInterval = setInterval(createConfetti, 200);
+    }
+
+    function startRainingFrowns() {
+      clearInterval(frownInterval);
+      frownInterval = setInterval(createFrown, 200);
+    }
+
+    function stopRainingFrowns() {
+      clearInterval(frownInterval);
+    }
+
+    function vote(answer) {
+      // Hide buttons after voting
+      document.getElementById('buttons-container').style.display = 'none';
+      
+      if (answer === 'trump') {
+        // Change to Trump answer
+        document.body.style.backgroundColor = 'red';
+        document.getElementById('question-text').innerText = 'Vote Trump!';
+        
+        // Start raining confetti
+        startRainingConfetti();
+        
+        // Stop raining frowny faces if any
+        stopRainingFrowns();
+        
+      } else {
+        // Change to Kamala answer
+        document.body.style.backgroundColor = 'blue';
+        document.getElementById('question-text').innerText = 'Vote Kamala...';
+        
+        // Start raining frowny faces
+        startRainingFrowns();
+      }
+    }
+  </script>
+</body>
+</html>
